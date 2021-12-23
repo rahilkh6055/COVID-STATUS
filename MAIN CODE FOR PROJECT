@@ -1,0 +1,91 @@
+from tkinter import *
+import csv
+import os
+file=open("main.csv","a")
+file.close()
+def close():
+    win.destroy()
+def graph():
+    os.system("python graph.py")
+def edit():
+    os.system("python edit.py")
+def delete():
+    os.system("python delete.py")
+def searchrec():
+    os.system("python searchrec.py")
+def addrec():
+    os.system("python addrecord.py")
+def mousewheel(event):## MouseWheel
+    canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+def onscroll(axis, *args):## Scrollbar
+    global canvas
+    if axis == 'y-axis':
+        canvas.yview(*args)
+    else:
+        assert False, f"axis {axis} is incorrect, use 'x-axis' or 'y-axis'"
+def showall():
+    global canvas
+    win1=Tk()
+    win1.title("CSV - Show all Records - python4csip.com")
+    win1.geometry("2000x1000")
+    win1.config(bg="WHITE")
+    win1.resizable(0,0)
+    win1.iconbitmap("logo.ico")
+    frame=Frame(win1)
+    frame.pack()
+    yscrollbar = Scrollbar(frame, orient='vertical',command=lambda *args: onscroll('y-axis', *args))
+    yscrollbar.pack(side="right",anchor="w",fill="both")
+    canvas=Canvas(frame,bg="WHITE",width="2000",height="950",scrollregion=(0, 0, 0, 2050),yscrollcommand=yscrollbar.set)
+    canvas.pack()
+    main_frame=Frame(canvas,bg="WHITE")
+    canvas.create_window((0,0),window=main_frame,anchor="nw")
+    canvas.yview_scroll(100, "units")
+    canvas.xview_scroll(100, "units")
+    Label(main_frame,text="S.NO",bg="WHITE",fg="BLACK",font=("Georgia",30)).grid(row=0,column=0)
+    Label(main_frame,text="COUNTRY",bg="WHITE",fg="BLACK",font=("Georgia",30)).grid(row=0,column=1)
+    Label(main_frame,text="TOTAL CASES",bg="WHITE",fg="BLACK",font=("Georgia",30)).grid(row=0,column=2)
+    Label(main_frame,text="NEW CASES",bg="WHITE",fg="BLACK",font=("Georgia",30)).grid(row=0,column=3)
+    Label(main_frame,text="NEW DEATH",bg="WHITE",fg="RED",font=("Georgia",30)).grid(row=0,column=4)
+    Label(main_frame,text="TOTAL DEATH",bg="WHITE",fg="RED",font=("Georgia",30)).grid(row=0,column=5)
+    Label(main_frame,text="NEW RECOVERY",bg="WHITE",fg="GREEN",font=("Georgia",30)).grid(row=0,column=6)
+    Label(main_frame,text="ACTIVE CASES",bg="WHITE",fg="BLUE",font=("Georgia",30)).grid(row=0,column=7)
+    with open("main.csv") as file:
+        read=csv.reader(file)
+        count=0
+        row_value=1
+        try:
+            total_percentage=0
+        except:
+            pass
+        for i in read:
+            Label(main_frame,text=i[0],bg="WHITE",fg="BLACK",font=("Georgia",30)).grid(row=row_value,column=0)
+            Label(main_frame,text=i[1],bg="WHITE",fg="BLACK",font=("Georgia",30)).grid(row=row_value,column=1)
+            Label(main_frame,text=i[2],bg="WHITE",fg="BLACK",font=("Georgia",30)).grid(row=row_value,column=2)
+            Label(main_frame,text=i[3],bg="WHITE",fg="BLACK",font=("Georgia",30)).grid(row=row_value,column=3)
+            Label(main_frame,text=i[4],bg="WHITE",fg="RED",font=("Georgia",30)).grid(row=row_value,column=4)
+            Label(main_frame,text=i[5],bg="WHITE",fg="RED",font=("Georgia",30)).grid(row=row_value,column=5)
+            Label(main_frame,text=i[6],bg="WHITE",fg="GREEN",font=("Georgia",30)).grid(row=row_value,column=6)
+            Label(main_frame,text=i[7],bg="WHITE",fg="BLUE",font=("Georgia",30)).grid(row=row_value,column=7)
+            row_value+=1
+win=Tk()
+win.title("CSV - python4csip")
+win.geometry("1300x1200")
+win.config(bg="SALMON")
+win.resizable(0,0)
+win.iconbitmap("logo.ico")
+Label(win,text="GLOBAL COVID-19 STATS",bg="SALMON",fg="BLACK",font=("Lucida Calligraphy",60)).pack(pady=10)
+b1=Button(win,text="SHOW ALL CASES",bg="Pink",fg="Indigo",border=30,relief="raise",font=("Britannic Bold",20),width=60,command=showall)
+b1.pack(pady=8)
+b2=Button(win,text="ADD CASES",bg="Pink",fg="Indigo",border=30,relief="raise",font=("Britannic Bold",20),width=60,command=addrec)
+b2.pack(pady=8)
+b3=Button(win,text="SEARCH CASES",bg="Pink",fg="Indigo",border=30,relief="raise",font=("Britannic Bold",20),width=60,command=searchrec)
+b3.pack(pady=8)
+b4=Button(win,text="EDIT CASES",bg="Pink",fg="Indigo",border=30,relief="raise",font=("Britannic Bold",20),width=60,command=edit)
+b4.pack(pady=8)
+b5=Button(win,text="DELET CASES",bg="Pink",fg="Indigo",border=30,relief="raise",font=("Britannic Bold",20),width=60,command=delete)
+b5.pack(pady=8)
+b6=Button(win,text="GRAPH",bg="Pink",fg="Indigo",border=30,relief="raise",font=("Britannic Bold",20),width=60,command=graph)
+b6.pack(pady=8)
+b7=Button(win,text="QUITE",bg="Pink",fg="Indigo",border=30,relief="raise",font=("Britannic Bold",20),width=60,command=close)
+b7.pack(pady=8)
+win.mainloop()
