@@ -1,0 +1,95 @@
+# © python4csip.com
+# © RKH
+from tkinter.ttk import *
+from tkinter import *
+from tkinter import messagebox
+import csv
+import os
+global uno,country,totalcases,newcases,win,newdeath,totaldeath,newrecovery,activecases
+def close():
+    win.destroy()
+def find():
+    global uno,country,totalcases,newcases,newdeath,totaldeath,newrecovery,activecases
+    u=uno.get()
+    if u=="Select U.No.":
+        messagebox.showinfo("CSV -RKH","Please Select U.No.")
+    elif len(u)>0 :
+        file=open("main.csv")
+        reader=csv.reader(file,delimiter=",")
+        for row in reader:
+            if int(u)==int(row[0]):
+                win.geometry("400x450")
+                country.set(row[1])
+                totalcases.set(row[2])
+                newcases.set(row[3])
+                newdeath.set(row[4])
+                totaldeath.set(row[5])
+                newrecovery.set(row[6])
+                activecases.set(row[7])
+        file.close()
+def press(e):
+    global uno,country,totalcases,newcases
+    u=uno.get()
+    if u=="Select U.No.":
+        messagebox.showinfo("CSV - RKH","Please Select U.No.")
+    if repr(e.keycode)==67:
+        close()
+    elif len(u)>0 :
+        if repr(e.keysym)=="'Return'":
+            find()
+    else:
+        messagebox.showinfo("CSV - RKH","Please Select U.No.")
+def main():
+    global uno,country,totalcases,newcases,win,newdeath,totaldeath,newrecovery,activecases
+    win=Tk()
+    win.title("CSV - python4csip - Search Record")
+    win.geometry("450x550")
+    win.config(bg="salmon")
+    win.iconbitmap("logo.ico")
+    win.resizable(0,0)
+    uno=StringVar()
+    country=StringVar()
+    totalcases=StringVar()
+    newcases=StringVar()
+    newdeath=StringVar()
+    totaldeath=StringVar()
+    newrecovery=StringVar()
+    activecases=StringVar()
+    data=[]
+    Label(win,text="SEARCH RECORDS",bg="SALMON",fg="black",font=("Lucida Calligraphy",15)).place(x=108,y=2)
+    Label(win,text="S.No.",bg="SALMON",fg="BLACK",font=("Georgia",10)).place(x=60,y=80)
+    Label(win,text="COUNTRY",bg="SALMON",fg="BLACK",font=("Georgia",10)).place(x=60,y=120)
+    Label(win,text="TOTAL CASES",bg="SALMON",fg="BLACK",font=("Georgia",10)).place(x=60,y=160)
+    Label(win,text="NEW CASES",bg="SALMON",fg="BLACK",font=("Georgia",10)).place(x=60,y=200)
+    Label(win,text="NEW DEATH",bg="SALMON",fg="BLACK",font=("Georgia",10)).place(x=60,y=240)
+    Label(win,text="TOTAL DEATH",bg="SALMON",fg="BLACK",font=("Georgia",10)).place(x=60,y=280)
+    Label(win,text="NEW RECOVERY",bg="SALMON",fg="BLACK",font=("Georgia",10)).place(x=60,y=320)
+    Label(win,text="ACTIVE CASES",bg="SALMON",fg="BLACK",font=("Georgia",10)).place(x=60,y=360)
+    file=open("main.csv")
+    read=csv.reader(file,delimiter=",")
+    for row in read:
+        data.append(row[0])
+    e0=ttk.OptionMenu(win,uno,"Select U.No.",*data)
+    e0.place(x=200,y=50)
+    e0.focus()
+    e1=Entry(win,textvariable=country,state="disable")
+    e1.place(x=200,y=90)
+    e1.focus()
+    e2=Entry(win,textvariable=totalcases,state="disable")
+    e2.place(x=200,y=130)
+    e3=Entry(win,textvariable=newcases,state="disable")
+    e3.place(x=200,y=210)
+    e4=Entry(win,textvariable=newdeath,state="disable")
+    e4.place(x=200,y=250)
+    e5=Entry(win,textvariable=totaldeath,state="disable")
+    e5.place(x=200,y=290)
+    e6=Entry(win,textvariable=newrecovery,state="disable")
+    e6.place(x=200,y=330)
+    e7=Entry(win,textvariable=activecases,state="disable")
+    e7.place(x=200,y=370)
+    Button(win,text="Find",bg="WHITE",fg="red",font=("Georgia",10),command=find).place(x=200,y=400)
+    Button(win,text="Close",bg="white",fg="red",font=("Georgia",10),command=close).place(x=250,y=400)
+    win.bind("<Key>",press)
+    win.mainloop()
+if __name__=="__main__":
+    main()
